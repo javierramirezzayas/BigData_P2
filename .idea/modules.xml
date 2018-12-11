@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../BigData_P2/.idea/BigData_P2.iml" filepath="$PROJECT_DIR$/../BigData_P2/.idea/BigData_P2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../BigData_P3/.idea/BigData_P3.iml" filepath="$PROJECT_DIR$/../BigData_P3/.idea/BigData_P3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../nlp_dictionary_ex/.idea/nlp_dictionary_ex.iml" filepath="$PROJECT_DIR$/../nlp_dictionary_ex/.idea/nlp_dictionary_ex.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../storeTweets/.idea/storeTweets.iml" filepath="$PROJECT_DIR$/../storeTweets/.idea/storeTweets.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>BigData P2</title>
+        <script src='static/chart.js'></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <style>
+            .button {
+              background-color: #4CAF50;
+              border: none;
+              color: white;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+            }
+            .button:hover{
+              background-color: #2D6930;
+            }
+            .item {
+              width: 700px;
+              height: 500px;
+              row-gap: 50px;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <center>
+            <h1 id="top">CIIC5995: Big Data Analytics</h1>
+            <h1>Project 2: Spark Twitter Analisys</h1>
+            <p>For this implementation a series of programs were made in order to analyze live tweets.</p>
+            <p>In this page you will find the graphs related with different analysis:</p>
+            <br>
+            <a href="#ex1" class="button">Excercise 1</a>
+            <a href="#ex2" class="button">Excercise 2</a>
+            <a href="#ex3" class="button">Excercise 3</a>
+            <a href="#ex4" class="button">Excercise 4</a>
+
+
+            <h2 id="ex1">Excercise 1: Top 10 Trending Twitter Hashtags</h2>
+            <div class="item">
+                <canvas id="hashtags_chart"></canvas>
+                <a href="#top" class="button">Go to top</a>
+            </div>
+            <br>
+            <h2 id="ex2">Excercise 2: Top 10 Trending Twitter Relevant Words</h2>
+            <div class="item">
+                <canvas id="relevant_words_chart"></canvas>
+                <a href="#top" class="button">Go to top</a>
+            </div>
+            <br>
+            <h2 id="ex3">Excercise 3: Top 10 Trending Twitter Users</h2>
+            <div class="item">
+                <canvas id="users_chart"></canvas>
+                <a href="#top" class="button">Go to top</a>
+            </div>
+            <br>
+            <h2 id="ex4">Excercise 4: Twitter Word Count</h2>
+            <div class="item">
+                <canvas id="keywords_chart"></canvas>
+                <a href="#top" class="button">Go to top</a>
+            </div>
+
+        </center>
+
+        <script>
+           var src_Hashtag_Labels = [];
+           var src_Hashtag_Data = [];
+           var src_Word_Labels = [];
+           var src_Word_Data = [];
+           var src_User_Labels = [];
+           var src_User_Data = [];
+           var src_Keyword_Labels = [];
+           var src_Keyword_Data = [];
+
+
+
+           var hctx = document.getElementById("hashtags_chart");
+           var hChart = new Chart(hctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: [{% for item in labels %}
+                              "{{item}}",
+                             {% endfor %}],
+                    datasets: [{
+                        label: '# of Mentions',
+                        data: [{% for item in values %}
+                                  {{item}},
+                                {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+           });
+           setInterval(function(){
+                $.getJSON('/refreshHashtagData', {
+                }, function(data) {
+                    src_Hashtag_Labels = data.hLabel;
+                    src_Hashtag_Data = data.hData;
+                });
+                hChart.data.labels = src_Hashtag_Labels;
+                hChart.data.datasets[0].data = src_Hashtag_Data;
+                hChart.update();
+           },1000);
+
+
+
+           var wctx = document.getElementById("relevant_words_chart");
+           var wChart = new Chart(wctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: [{% for item in labels %}
+                              "{{item}}",
+                             {% endfor %}],
+                    datasets: [{
+                        label: '# of Mentions',
+                        data: [{% for item in values %}
+                                  {{item}},
+                                {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+           });
+           setInterval(function(){
+                $.getJSON('/refreshWordData', {
+                }, function(data) {
+                    src_Word_Labels = data.wLabel;
+                    src_Word_Data = data.wData;
+                });
+                wChart.data.labels = src_Word_Labels;
+                wChart.data.datasets[0].data = src_Word_Data;
+                wChart.update();
+           },1000);
+
+
+
+           var uctx = document.getElementById("users_chart");
+           var uChart = new Chart(uctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: [{% for item in labels %}
+                              "{{item}}",
+                             {% endfor %}],
+                    datasets: [{
+                        label: '# of Mentions',
+                        data: [{% for item in values %}
+                                  {{item}},
+                                {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+           });
+           setInterval(function(){
+                $.getJSON('/refreshUserData', {
+                }, function(data) {
+                    src_User_Labels = data.uLabel;
+                    src_User_Data = data.uData;
+                });
+                uChart.data.labels = src_User_Labels;
+                uChart.data.datasets[0].data = src_User_Data;
+                uChart.update();
+           },1000);
+
+
+
+           var kctx = document.getElementById("keywords_chart");
+           var kChart = new Chart(kctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: [{% for item in labels %}
+                              "{{item}}",
+                             {% endfor %}],
+                    datasets: [{
+                        label: '# of Mentions',
+                        data: [{% for item in values %}
+                                  {{item}},
+                                {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255,99,132,1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+           });
+           setInterval(function(){
+                $.getJSON('/refreshKeywordData', {
+                }, function(data) {
+                    src_Keyword_Labels = data.kLabel;
+                    src_Keyword_Data = data.kData;
+                });
+                kChart.data.labels = src_Keyword_Labels;
+                kChart.data.datasets[0].data = src_Keyword_Data;
+                kChart.update();
+           },1000);
+        </script>
+
+
+    </body>
+</html>
